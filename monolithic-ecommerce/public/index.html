@@ -1,0 +1,459 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>AuraStore | Monolithic E-Commerce Platform</title>
+  <meta name="description" content="Demonstration of a high-performance Monolithic E-Commerce Application featuring single-tier unified backend architecture, shared database, and in-process execution pipeline.">
+  <!-- Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+  <!-- Top Architecture Announcement Banner -->
+  <aside class="arch-banner" id="archBanner">
+    <div class="banner-content">
+      <span class="arch-badge">🏛️ MONOLITHIC ARCHITECTURE</span>
+      <span class="banner-text">Single-Process Deployment &bull; Port: <strong>5000</strong> &bull; Shared SQLite DB &bull; Direct In-Memory ACID Invocations</span>
+      <button class="inspect-btn-sm" id="openArchInspectorFromBanner">Inspect Architecture &rarr;</button>
+    </div>
+  </aside>
+
+  <!-- Navigation Bar -->
+  <header class="navbar" id="navbar">
+    <div class="nav-container">
+      <div class="brand-group" id="brandGroup">
+        <div class="brand-icon">
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 2 3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4Z"/><line x1="3" y1="6" x2="21" y2="6"/><path d="M16 10a4 4 0 0 1-8 0"/></svg>
+        </div>
+        <div>
+          <h1 class="brand-title">AuraStore <span class="brand-tag">MONOLITH</span></h1>
+          <span class="brand-sub">Unified Single-Tier Architecture</span>
+        </div>
+      </div>
+
+      <!-- Navigation Links -->
+      <nav class="nav-links">
+        <button class="nav-link active" id="navShopBtn" data-view="shop">Storefront</button>
+        <button class="nav-link" id="navOrdersBtn" data-view="orders">Order History</button>
+        <button class="nav-link highlight" id="navInspectorBtn" data-view="inspector">
+          <span class="pulse-dot"></span> System Diagnostics
+        </button>
+      </nav>
+
+      <!-- Search & Cart Group -->
+      <div class="nav-actions">
+        <div class="search-box">
+          <svg class="search-icon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+          <input type="text" id="searchInput" placeholder="Search tech, gear...">
+        </div>
+
+        <button class="cart-trigger-btn" id="openCartBtn" aria-label="Open Shopping Cart">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="8" cy="21" r="1"/><circle cx="19" cy="21" r="1"/><path d="M2.05 2.05h2l2.66 12.42a2 2 0 0 0 2 1.58h9.78a2 2 0 0 0 1.95-1.57l1.65-7.43H5.12"/></svg>
+          <span class="cart-badge" id="cartCount">0</span>
+        </button>
+
+        <div class="user-chip" id="userProfileChip">
+          <img src="https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=100&q=80" alt="Avatar" class="avatar-img">
+          <span class="user-name">Alex Turner</span>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <!-- Main Content Container -->
+  <main class="main-container">
+
+    <!-- VIEW 1: SHOPPING STOREFRONT -->
+    <section class="view-section active" id="viewShop">
+      
+      <!-- Hero Banner -->
+      <div class="hero-card">
+        <div class="hero-info">
+          <span class="hero-chip">⚡ In-Memory High Throughput</span>
+          <h2 class="hero-heading">Engineered for Seamless Performance</h2>
+          <p class="hero-subtext">Experience next-generation tech hardware powered by a streamlined monolithic single-tier runtime with instant atomic transaction checkout.</p>
+          <div class="hero-stats">
+            <div class="stat-item">
+              <span class="stat-val" id="statAvgLatency">0.4 ms</span>
+              <span class="stat-lbl">In-Process Call Latency</span>
+            </div>
+            <div class="stat-item">
+              <span class="stat-val">100% ACID</span>
+              <span class="stat-lbl">Transactional Integrity</span>
+            </div>
+            <div class="stat-item">
+              <span class="stat-val">1 Single DB</span>
+              <span class="stat-lbl">Shared SQLite Database</span>
+            </div>
+          </div>
+        </div>
+        <div class="hero-graphics">
+          <div class="arch-card-preview">
+            <div class="arch-card-header">
+              <span class="code-dot red"></span>
+              <span class="code-dot yellow"></span>
+              <span class="code-dot green"></span>
+              <span class="arch-card-title">Monolithic Unified Process</span>
+            </div>
+            <div class="arch-card-body">
+              <div class="stack-layer">Client Browser (Port 5000)</div>
+              <div class="stack-arrow">&darr; Static HTTP &amp; REST &darr;</div>
+              <div class="stack-layer active-layer">Unified Express Server (server.js)</div>
+              <div class="stack-subgrid">
+                <span class="sub-mod">Auth</span>
+                <span class="sub-mod">Catalog</span>
+                <span class="sub-mod">Cart</span>
+                <span class="sub-mod">Checkout</span>
+              </div>
+              <div class="stack-arrow">&darr; Shared Direct Connection &darr;</div>
+              <div class="stack-layer db-layer">monolith_ecommerce.db</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Categories Filter Bar -->
+      <div class="filter-bar">
+        <div class="category-pills" id="categoryPills">
+          <button class="pill active" data-category="All">All Categories</button>
+          <button class="pill" data-category="Laptops">Laptops</button>
+          <button class="pill" data-category="Smartphones">Smartphones</button>
+          <button class="pill" data-category="Audio">Audio</button>
+          <button class="pill" data-category="Wearables">Wearables</button>
+          <button class="pill" data-category="Accessories">Accessories</button>
+        </div>
+
+        <div class="sort-group">
+          <label for="sortSelect">Sort by:</label>
+          <select id="sortSelect" class="sort-dropdown">
+            <option value="featured">Featured First</option>
+            <option value="price-low">Price: Low to High</option>
+            <option value="price-high">Price: High to Low</option>
+            <option value="rating">Highest Rated</option>
+          </select>
+        </div>
+      </div>
+
+      <!-- Products Grid -->
+      <div class="products-grid" id="productsGrid">
+        <!-- Injected via JavaScript -->
+      </div>
+    </section>
+
+    <!-- VIEW 2: ORDERS HISTORY -->
+    <section class="view-section" id="viewOrders">
+      <div class="section-header">
+        <div>
+          <h2 class="section-title">Order History &amp; Receipts</h2>
+          <p class="section-sub">Past transactions committed to the monolithic transactional database table.</p>
+        </div>
+        <button class="btn-secondary" id="refreshOrdersBtn">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="23 4 23 10 17 10"/><polyline points="1 20 1 14 7 14"/><path d="M3.51 9a9 9 0 0 1 14.85-3.36L23 10M1 14l4.64 4.36A9 9 0 0 0 20.49 15"/></svg>
+          Refresh Orders
+        </button>
+      </div>
+
+      <div class="orders-list" id="ordersList">
+        <!-- Injected via JavaScript -->
+      </div>
+    </section>
+
+    <!-- VIEW 3: MONOLITHIC SYSTEM DIAGNOSTICS & ARCHITECTURE INSPECTOR -->
+    <section class="view-section" id="viewInspector">
+      <div class="inspector-hero">
+        <div class="inspector-badge">SYSTEM INTERNALS</div>
+        <h2 class="section-title">Monolithic Architecture Diagnostic Console</h2>
+        <p class="section-sub">Real-time inspection of the unified Express process, in-memory memory footprint, single shared database tables, and monolithic execution lifecycle.</p>
+      </div>
+
+      <!-- Architecture Metrics Cards -->
+      <div class="metrics-row" id="metricsRow">
+        <div class="metric-card">
+          <div class="metric-icon purple">
+            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="2" width="20" height="8" rx="2" ry="2"/><rect x="2" y="14" width="20" height="8" rx="2" ry="2"/><line x1="6" y1="6" x2="6.01" y2="6"/><line x1="6" y1="18" x2="6.01" y2="18"/></svg>
+          </div>
+          <div class="metric-info">
+            <span class="metric-label">Process Runtime</span>
+            <span class="metric-value" id="diagPid">PID: --</span>
+            <span class="metric-desc" id="diagUptime">Uptime: --</span>
+          </div>
+        </div>
+
+        <div class="metric-card">
+          <div class="metric-icon blue">
+            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2v20M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg>
+          </div>
+          <div class="metric-info">
+            <span class="metric-label">RAM Footprint</span>
+            <span class="metric-value" id="diagMemory">-- MB RSS</span>
+            <span class="metric-desc" id="diagHeap">Heap: -- MB</span>
+          </div>
+        </div>
+
+        <div class="metric-card">
+          <div class="metric-icon green">
+            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><ellipse cx="12" cy="5" rx="9" ry="3"/><path d="M21 12c0 1.66-4 3-9 3s-9-1.34-9-3"/><path d="M3 5v14c0 1.66 4 3 9 3s9-1.34 9-3V5"/></svg>
+          </div>
+          <div class="metric-info">
+            <span class="metric-label">Shared Database</span>
+            <span class="metric-value" id="diagDbTables">6 Tables</span>
+            <span class="metric-desc" id="diagDbFile">monolith_ecommerce.db</span>
+          </div>
+        </div>
+
+        <div class="metric-card">
+          <div class="metric-icon amber">
+            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg>
+          </div>
+          <div class="metric-info">
+            <span class="metric-label">Inter-Module Latency</span>
+            <span class="metric-value">&lt; 0.5 ms</span>
+            <span class="metric-desc">Zero network hop overhead</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Architectural Deep Dive Grid -->
+      <div class="diag-grid">
+        <!-- Left: Architecture Diagram & Modules -->
+        <div class="diag-card">
+          <h3 class="diag-card-title">Unified Monolithic Process Layout</h3>
+          <p class="diag-card-desc">All functional modules run inside a single memory boundary and access the shared database instance:</p>
+
+          <div class="monolith-topology-box">
+            <div class="topo-item client-node">
+              <span class="topo-badge">Frontend Client</span>
+              <strong>Single-Page Application (SPA)</strong>
+              <small>Port 5000 &bull; public/app.js</small>
+            </div>
+            <div class="topo-connector">Direct REST API Calls (HTTP / Localhost)</div>
+            <div class="topo-item server-node">
+              <span class="topo-badge">Unified Monolith Server</span>
+              <strong>Express Node.js Process (Port 5000)</strong>
+              <div class="modules-chip-grid" id="internalModulesGrid">
+                <!-- Injected via JS -->
+              </div>
+            </div>
+            <div class="topo-connector">Direct In-Process SQLite Connection Pool</div>
+            <div class="topo-item db-node">
+              <span class="topo-badge">Central Shared Database</span>
+              <strong>monolith_ecommerce.db</strong>
+              <div class="table-counts-pills" id="tableStatsPills">
+                <!-- Injected via JS -->
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Right: Monolithic Architectural Trade-offs -->
+        <div class="diag-card">
+          <h3 class="diag-card-title">Architectural Trade-Off Analysis</h3>
+          <p class="diag-card-desc">Evaluating Monolithic design characteristics for academic and production assessment:</p>
+
+          <div class="tradeoffs-box">
+            <div class="tradeoff-col pros">
+              <h4>
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#10b981" stroke-width="2"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>
+                Key Advantages
+              </h4>
+              <ul class="tradeoff-list" id="prosList">
+                <li>Simple single-repository development workflow</li>
+                <li>Zero inter-service network latency (RAM speed)</li>
+                <li>Simple atomic ACID transactions across domains</li>
+                <li>Single-command deployment with minimal DevOps overhead</li>
+              </ul>
+            </div>
+
+            <div class="tradeoff-col cons">
+              <h4>
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#ef4444" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="15" y1="9" x2="9" y2="15"/><line x1="9" y1="9" x2="15" y2="15"/></svg>
+                Key Limitations
+              </h4>
+              <ul class="tradeoff-list" id="consList">
+                <li>Single Point of Failure: Bug in one module halts entire app</li>
+                <li>Tightly coupled code restricts independent module scaling</li>
+                <li>Requires redeploying entire bundle for minor changes</li>
+                <li>Technology lock-in to single runtime and language</li>
+              </ul>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Execution Trace Log Table -->
+      <div class="diag-card trace-card">
+        <div class="trace-header">
+          <div>
+            <h3 class="diag-card-title">Live Monolithic In-Memory Trace Log</h3>
+            <p class="diag-card-desc">Internal call stack and execution timings captured within the single server runtime.</p>
+          </div>
+          <button class="btn-sm" id="refreshTracesBtn">Refresh Traces</button>
+        </div>
+
+        <div class="table-wrapper">
+          <table class="trace-table" id="traceTable">
+            <thead>
+              <tr>
+                <th>Timestamp</th>
+                <th>Method</th>
+                <th>Endpoint</th>
+                <th>Internal Call Pipeline</th>
+                <th>Latency</th>
+                <th>Memory RSS</th>
+              </tr>
+            </thead>
+            <tbody id="traceTableBody">
+              <!-- Injected via JS -->
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+    </section>
+
+  </main>
+
+  <!-- CART SLIDE-OVER DRAWER -->
+  <aside class="cart-drawer" id="cartDrawer" aria-hidden="true">
+    <div class="cart-backdrop" id="cartBackdrop"></div>
+    <div class="cart-panel">
+      <div class="cart-header">
+        <div>
+          <h3 class="cart-title">Your Cart</h3>
+          <span class="cart-subtitle" id="cartHeaderCount">0 items</span>
+        </div>
+        <button class="close-btn" id="closeCartBtn">&times;</button>
+      </div>
+
+      <div class="cart-body" id="cartItemsList">
+        <!-- Injected via JS -->
+      </div>
+
+      <div class="cart-footer" id="cartFooter">
+        <div class="coupon-box">
+          <input type="text" id="couponInput" placeholder="Coupon: SAVE10 or MONOLITH20">
+          <button class="coupon-btn" id="applyCouponBtn">Apply</button>
+        </div>
+
+        <div class="summary-breakdown">
+          <div class="summary-line">
+            <span>Subtotal</span>
+            <span id="summarySubtotal">$0.00</span>
+          </div>
+          <div class="summary-line" id="discountLine" style="display:none;">
+            <span>Discount</span>
+            <span id="summaryDiscount" class="text-green">-$0.00</span>
+          </div>
+          <div class="summary-line">
+            <span>Estimated Tax (8%)</span>
+            <span id="summaryTax">$0.00</span>
+          </div>
+          <div class="summary-line total-line">
+            <span>Order Total</span>
+            <span id="summaryTotal">$0.00</span>
+          </div>
+        </div>
+
+        <button class="btn-primary checkout-trigger-btn" id="proceedToCheckoutBtn">
+          Proceed to Atomic Checkout &rarr;
+        </button>
+      </div>
+    </div>
+  </aside>
+
+  <!-- CHECKOUT MODAL -->
+  <div class="modal" id="checkoutModal">
+    <div class="modal-backdrop" id="checkoutBackdrop"></div>
+    <div class="modal-card">
+      <div class="modal-header">
+        <div>
+          <span class="modal-badge">ACID TRANSACTION PIPELINE</span>
+          <h3 class="modal-title">Monolithic Unified Checkout</h3>
+        </div>
+        <button class="close-btn" id="closeCheckoutBtn">&times;</button>
+      </div>
+
+      <form id="checkoutForm" class="checkout-form">
+        <div class="form-row">
+          <div class="form-group">
+            <label for="shippingName">Full Recipient Name</label>
+            <input type="text" id="shippingName" required value="Alex Turner">
+          </div>
+          <div class="form-group">
+            <label for="shippingAddress">Street Address</label>
+            <input type="text" id="shippingAddress" required value="742 Evergreen Terrace">
+          </div>
+        </div>
+
+        <div class="form-row">
+          <div class="form-group">
+            <label for="shippingCity">City</label>
+            <input type="text" id="shippingCity" required value="Springfield">
+          </div>
+          <div class="form-group">
+            <label for="shippingZip">Postal / ZIP Code</label>
+            <input type="text" id="shippingZip" required value="97477">
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label>Payment Method Simulation</label>
+          <div class="payment-options">
+            <label class="pay-option active">
+              <input type="radio" name="payMethod" value="Credit Card" checked>
+              <span>💳 Credit Card (Direct In-Memory Gateway)</span>
+            </label>
+            <label class="pay-option">
+              <input type="radio" name="payMethod" value="Instant UPI">
+              <span>⚡ Instant UPI / NetBanking</span>
+            </label>
+          </div>
+        </div>
+
+        <div class="checkout-transaction-notice">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="12" y1="16" x2="12" y2="12"/><line x1="12" y1="8" x2="12.01" y2="8"/></svg>
+          <p>This request invokes the <strong>Monolithic Order Controller</strong>, validating stock, executing payment simulation, inserting orders, and updating inventory in a <strong>single ACID commit</strong>.</p>
+        </div>
+
+        <div class="modal-footer">
+          <button type="button" class="btn-secondary" id="cancelCheckoutBtn">Cancel</button>
+          <button type="submit" class="btn-primary" id="confirmOrderBtn">
+            Confirm &amp; Place Order ($<span id="checkoutTotalValue">0.00</span>)
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- ORDER SUCCESS MODAL -->
+  <div class="modal" id="orderSuccessModal">
+    <div class="modal-backdrop" id="successBackdrop"></div>
+    <div class="modal-card success-card">
+      <div class="success-icon-wrap">
+        <svg width="44" height="44" viewBox="0 0 24 24" fill="none" stroke="#10b981" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>
+      </div>
+      <h3 class="success-title">Order Placed Successfully!</h3>
+      <p class="success-sub">Committed synchronously to monolithic database via single atomic transaction.</p>
+
+      <div class="receipt-box" id="successReceiptDetails">
+        <!-- Injected via JS -->
+      </div>
+
+      <div class="modal-footer centered">
+        <button class="btn-primary" id="viewMyOrdersBtn">View in Order History</button>
+        <button class="btn-secondary" id="continueShoppingBtn">Continue Shopping</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Toast Notification Container -->
+  <div class="toast-container" id="toastContainer"></div>
+
+  <!-- Main JavaScript App -->
+  <script src="app.js"></script>
+</body>
+</html>

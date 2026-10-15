@@ -1,0 +1,13 @@
+{
+  "name": "monolithic-ecommerce",
+  "version": "1.0.0",
+  "description": "Unified Monolithic E-Commerce Application with single shared database, cohesive business logic, and integrated frontend",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js"
+  },
+  "dependencies": {
+    "cors": "^2.8.5",
+    "express": "^4.21.2"
+  }
+}

@@ -1,0 +1,17 @@
+{
+  "name": "microservices-ecommerce",
+  "version": "1.0.0",
+  "description": "Distributed Microservices E-Commerce Platform with API Gateway, Database-per-Service, and Distributed Tracing",
+  "main": "api-gateway/server.js",
+  "scripts": {
+    "start:gateway": "node api-gateway/server.js",
+    "start:product": "node product-service/server.js",
+    "start:user": "node user-service/server.js",
+    "start:order": "node order-service/server.js",
+    "start:payment": "node payment-service/server.js"
+  },
+  "dependencies": {
+    "cors": "^2.8.5",
+    "express": "^4.21.2"
+  }
+}

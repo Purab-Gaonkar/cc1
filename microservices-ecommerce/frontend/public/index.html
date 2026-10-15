@@ -1,0 +1,437 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>NovaCommerce | Microservices E-Commerce Architecture</title>
+  <meta name="description" content="Decentralized Microservices E-Commerce Application featuring API Gateway routing, database-per-service pattern, distributed saga checkout, and real-time topology observability.">
+  <!-- Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&family=Plus+Jakarta+Sans:wght@400;500;600;700&family=Fira+Code:wght@400;500;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+  <!-- Microservices Architectural Header Banner -->
+  <aside class="arch-banner" id="archBanner">
+    <div class="banner-content">
+      <span class="arch-badge">🌐 MICROSERVICES ARCHITECTURE</span>
+      <span class="banner-text">Decentralized Services &bull; API Gateway: <strong>Port 8000</strong> &bull; Database-per-Service Pattern &bull; Distributed Saga Choreography</span>
+      <button class="inspect-btn-sm" id="openTopologyFromBanner">View Service Topology &rarr;</button>
+    </div>
+  </aside>
+
+  <!-- Navbar -->
+  <header class="navbar" id="navbar">
+    <div class="nav-container">
+      <div class="brand-group" id="brandGroup">
+        <div class="brand-icon">
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg>
+        </div>
+        <div>
+          <h1 class="brand-title">NovaCommerce <span class="brand-tag">MICROSERVICES</span></h1>
+          <span class="brand-sub">Decoupled Multi-Service Mesh</span>
+        </div>
+      </div>
+
+      <!-- Navigation Tabs -->
+      <nav class="nav-links">
+        <button class="nav-link active" id="navShopBtn" data-view="shop">Storefront</button>
+        <button class="nav-link" id="navOrdersBtn" data-view="orders">Order History</button>
+        <button class="nav-link highlight" id="navTopologyBtn" data-view="topology">
+          <span class="pulse-dot"></span> Service Mesh &amp; Tracing
+        </button>
+      </nav>
+
+      <!-- Actions -->
+      <div class="nav-actions">
+        <div class="search-box">
+          <svg class="search-icon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+          <input type="text" id="searchInput" placeholder="Search catalog via Gateway...">
+        </div>
+
+        <button class="cart-trigger-btn" id="openCartBtn" aria-label="Open Shopping Cart">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="8" cy="21" r="1"/><circle cx="19" cy="21" r="1"/><path d="M2.05 2.05h2l2.66 12.42a2 2 0 0 0 2 1.58h9.78a2 2 0 0 0 1.95-1.57l1.65-7.43H5.12"/></svg>
+          <span class="cart-badge" id="cartCount">0</span>
+        </button>
+
+        <div class="user-chip">
+          <span class="user-status-dot"></span>
+          <span class="user-name">Alex (User-Svc #8002)</span>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <!-- Main Workspace -->
+  <main class="main-container">
+
+    <!-- VIEW 1: STOREFRONT -->
+    <section class="view-section active" id="viewShop">
+      <!-- Hero Banner -->
+      <div class="hero-card">
+        <div class="hero-info">
+          <span class="hero-chip">⚙️ Polyglot &amp; Scalable Architecture</span>
+          <h2 class="hero-heading">High-Availability Decentralized E-Commerce</h2>
+          <p class="hero-subtext">Each domain (Catalog, Auth, Orders, Payments) is deployed as an autonomous microservice with its own dedicated database and lifecycle, coordinated seamlessly through an API Gateway.</p>
+          
+          <div class="hero-stats">
+            <div class="stat-item">
+              <span class="stat-val" id="statServicesOnline">4 / 4 UP</span>
+              <span class="stat-lbl">Microservices Online</span>
+            </div>
+            <div class="stat-item">
+              <span class="stat-val">4 Isolated DBs</span>
+              <span class="stat-lbl">Database-per-Service</span>
+            </div>
+            <div class="stat-item">
+              <span class="stat-val">Distributed SAGA</span>
+              <span class="stat-lbl">Order Orchestration</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="hero-graphics">
+          <div class="mesh-summary-card">
+            <div class="mesh-card-header">
+              <span class="mesh-title">🌐 Live Gateway Routing Table</span>
+              <span class="status-pill-green">ACTIVE</span>
+            </div>
+            <div class="routing-entry">
+              <span class="route-path">/api/products/*</span>
+              <span class="route-arrow">&rarr;</span>
+              <span class="route-target">Product-Service (:8001)</span>
+            </div>
+            <div class="routing-entry">
+              <span class="route-path">/api/auth/*, /users/*</span>
+              <span class="route-arrow">&rarr;</span>
+              <span class="route-target">User-Service (:8002)</span>
+            </div>
+            <div class="routing-entry">
+              <span class="route-path">/api/orders/*, /cart/*</span>
+              <span class="route-arrow">&rarr;</span>
+              <span class="route-target">Order-Service (:8003)</span>
+            </div>
+            <div class="routing-entry">
+              <span class="route-path">/api/payments/*</span>
+              <span class="route-arrow">&rarr;</span>
+              <span class="route-target">Payment-Service (:8004)</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Filters & Sorting -->
+      <div class="filter-bar">
+        <div class="category-pills" id="categoryPills">
+          <button class="pill active" data-category="All">All Categories</button>
+          <button class="pill" data-category="Laptops">Laptops</button>
+          <button class="pill" data-category="Smartphones">Smartphones</button>
+          <button class="pill" data-category="Audio">Audio</button>
+          <button class="pill" data-category="Wearables">Wearables</button>
+          <button class="pill" data-category="Accessories">Accessories</button>
+        </div>
+
+        <div class="sort-group">
+          <label for="sortSelect">Sort by:</label>
+          <select id="sortSelect" class="sort-dropdown">
+            <option value="featured">Featured First</option>
+            <option value="price-low">Price: Low to High</option>
+            <option value="price-high">Price: High to Low</option>
+            <option value="rating">Highest Rated</option>
+          </select>
+        </div>
+      </div>
+
+      <!-- Products Grid -->
+      <div class="products-grid" id="productsGrid">
+        <!-- Injected via JS -->
+      </div>
+    </section>
+
+    <!-- VIEW 2: ORDERS HISTORY -->
+    <section class="view-section" id="viewOrders">
+      <div class="section-header">
+        <div>
+          <h2 class="section-title">Order Ledger &amp; Distributed Receipts</h2>
+          <p class="section-sub">Orders finalized through multi-service Saga choreography across Order, Product, and Payment Microservices.</p>
+        </div>
+        <button class="btn-secondary" id="refreshOrdersBtn">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="23 4 23 10 17 10"/><polyline points="1 20 1 14 7 14"/><path d="M3.51 9a9 9 0 0 1 14.85-3.36L23 10M1 14l4.64 4.36A9 9 0 0 0 20.49 15"/></svg>
+          Refresh Orders
+        </button>
+      </div>
+
+      <div class="orders-list" id="ordersList">
+        <!-- Injected via JS -->
+      </div>
+    </section>
+
+    <!-- VIEW 3: SERVICE MESH TOPOLOGY & DISTRIBUTED TRACING -->
+    <section class="view-section" id="viewTopology">
+      <div class="inspector-hero">
+        <div class="inspector-badge">OBSERVABILITY CONSOLE</div>
+        <h2 class="section-title">Microservices Topology &amp; Distributed Tracing</h2>
+        <p class="section-sub">Real-time health monitoring of autonomous microservices, independent databases, and correlation-id request traces.</p>
+      </div>
+
+      <!-- Interactive Microservices Topology Visualizer -->
+      <div class="topology-container">
+        <div class="gateway-node-card">
+          <div class="node-header">
+            <span class="node-badge-gw">CENTRAL ROUTER</span>
+            <span class="node-status-online" id="gwStatus">● ONLINE</span>
+          </div>
+          <h3 class="node-title">API Gateway Core</h3>
+          <p class="node-desc">Port: <strong>8000</strong> &bull; Reverse Proxy, Security &amp; Distributed Tracing</p>
+        </div>
+
+        <div class="topology-connections-row">
+          <div class="mesh-arrow-line"><span>HTTP REST / JSON</span></div>
+          <div class="mesh-arrow-line"><span>HTTP REST / JSON</span></div>
+          <div class="mesh-arrow-line"><span>HTTP REST / JSON</span></div>
+          <div class="mesh-arrow-line"><span>HTTP REST / JSON</span></div>
+        </div>
+
+        <!-- 4 Autonomous Microservices Cards -->
+        <div class="microservices-cards-grid" id="servicesGrid">
+          <!-- Injected via JS -->
+        </div>
+      </div>
+
+      <!-- Distributed Saga Visualization Card -->
+      <div class="saga-explainer-card">
+        <h3 class="diag-card-title">Distributed Transaction Orchestration (Saga Pattern)</h3>
+        <p class="diag-card-desc">Unlike a Monolith which commits in a single database transaction, Microservices coordinate across autonomous databases via network RPCs:</p>
+        
+        <div class="saga-steps-flow">
+          <div class="saga-step-box">
+            <span class="saga-step-num">Step 1</span>
+            <strong>Client Request</strong>
+            <small>POST /api/orders/checkout</small>
+            <span class="saga-service-tag">API Gateway (:8000)</span>
+          </div>
+          <div class="saga-flow-arrow">&rarr;</div>
+          <div class="saga-step-box">
+            <span class="saga-step-num">Step 2</span>
+            <strong>Inventory Reserve</strong>
+            <small>PUT /products/:id/stock</small>
+            <span class="saga-service-tag">Product-Svc (:8001)</span>
+          </div>
+          <div class="saga-flow-arrow">&rarr;</div>
+          <div class="saga-step-box">
+            <span class="saga-step-num">Step 3</span>
+            <strong>Authorize Payment</strong>
+            <small>POST /payments/charge</small>
+            <span class="saga-service-tag">Payment-Svc (:8004)</span>
+          </div>
+          <div class="saga-flow-arrow">&rarr;</div>
+          <div class="saga-step-box">
+            <span class="saga-step-num">Step 4</span>
+            <strong>Commit Local Order</strong>
+            <small>Insert order into orders.db</small>
+            <span class="saga-service-tag">Order-Svc (:8003)</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Architecture Trade-Offs Deep Dive -->
+      <div class="diag-grid">
+        <div class="diag-card">
+          <h3 class="diag-card-title">Microservices Advantages</h3>
+          <p class="diag-card-desc">Strengths of decoupled service architecture:</p>
+          <ul class="tradeoff-list green">
+            <li><strong>Independent Scalability:</strong> Scale high-load services (e.g. Product Catalog) without duplicating payments.</li>
+            <li><strong>Fault Isolation:</strong> A crash or memory leak in the Payment Service does not bring down Catalog browsing.</li>
+            <li><strong>Polyglot Freedom:</strong> Services can use different languages, frameworks, and storage engines per domain.</li>
+            <li><strong>Autonomous Deployments:</strong> Small teams can ship changes to User Service without coordinating a monolith release.</li>
+          </ul>
+        </div>
+
+        <div class="diag-card">
+          <h3 class="diag-card-title">Microservices Complexities</h3>
+          <p class="diag-card-desc">Trade-offs and architectural costs to manage:</p>
+          <ul class="tradeoff-list red">
+            <li><strong>Network Latency:</strong> Inter-service HTTP hops introduce latency overhead compared to in-memory calls.</li>
+            <li><strong>Eventual Consistency:</strong> Cannot use simple atomic SQL transactions; requires compensating transactions (Sagas).</li>
+            <li><strong>Operational Overhead:</strong> Requires API gateways, service discovery, distributed tracing, and multi-container orchestration.</li>
+            <li><strong>Debugging Difficulty:</strong> Tracing bugs across multiple services requires unified correlation IDs.</li>
+          </ul>
+        </div>
+      </div>
+
+      <!-- Live Distributed Traces Table -->
+      <div class="diag-card trace-card">
+        <div class="trace-header">
+          <div>
+            <h3 class="diag-card-title">Live Distributed Request Traces</h3>
+            <p class="diag-card-desc">Correlation IDs and hop timings tracked across the API Gateway and upstream microservices.</p>
+          </div>
+          <button class="btn-sm" id="refreshTracesBtn">Refresh Traces</button>
+        </div>
+
+        <div class="table-wrapper">
+          <table class="trace-table" id="traceTable">
+            <thead>
+              <tr>
+                <th>Timestamp</th>
+                <th>Correlation ID</th>
+                <th>Method</th>
+                <th>Client Path</th>
+                <th>Target Microservice</th>
+                <th>Status</th>
+                <th>Hop Latency</th>
+              </tr>
+            </thead>
+            <tbody id="traceTableBody">
+              <!-- Injected via JS -->
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+    </section>
+
+  </main>
+
+  <!-- CART DRAWER -->
+  <aside class="cart-drawer" id="cartDrawer" aria-hidden="true">
+    <div class="cart-backdrop" id="cartBackdrop"></div>
+    <div class="cart-panel">
+      <div class="cart-header">
+        <div>
+          <h3 class="cart-title">Microservice Cart</h3>
+          <span class="cart-subtitle" id="cartHeaderCount">Managed by Order-Service (:8003)</span>
+        </div>
+        <button class="close-btn" id="closeCartBtn">&times;</button>
+      </div>
+
+      <div class="cart-body" id="cartItemsList">
+        <!-- Injected via JS -->
+      </div>
+
+      <div class="cart-footer" id="cartFooter">
+        <div class="coupon-box">
+          <input type="text" id="couponInput" placeholder="Coupon: SAVE10 or MICRO20">
+          <button class="coupon-btn" id="applyCouponBtn">Apply</button>
+        </div>
+
+        <div class="summary-breakdown">
+          <div class="summary-line">
+            <span>Subtotal</span>
+            <span id="summarySubtotal">$0.00</span>
+          </div>
+          <div class="summary-line" id="discountLine" style="display:none;">
+            <span>Discount</span>
+            <span id="summaryDiscount" class="text-green">-$0.00</span>
+          </div>
+          <div class="summary-line">
+            <span>Estimated Tax (8%)</span>
+            <span id="summaryTax">$0.00</span>
+          </div>
+          <div class="summary-line total-line">
+            <span>Total Amount</span>
+            <span id="summaryTotal">$0.00</span>
+          </div>
+        </div>
+
+        <button class="btn-primary checkout-trigger-btn" id="proceedToCheckoutBtn">
+          Initiate Distributed Saga Checkout &rarr;
+        </button>
+      </div>
+    </div>
+  </aside>
+
+  <!-- CHECKOUT MODAL -->
+  <div class="modal" id="checkoutModal">
+    <div class="modal-backdrop" id="checkoutBackdrop"></div>
+    <div class="modal-card">
+      <div class="modal-header">
+        <div>
+          <span class="modal-badge">DISTRIBUTED SAGA CHECKOUT</span>
+          <h3 class="modal-title">Multi-Service Orchestration</h3>
+        </div>
+        <button class="close-btn" id="closeCheckoutBtn">&times;</button>
+      </div>
+
+      <form id="checkoutForm" class="checkout-form">
+        <div class="form-row">
+          <div class="form-group">
+            <label for="shippingName">Full Name</label>
+            <input type="text" id="shippingName" required value="Alex Turner">
+          </div>
+          <div class="form-group">
+            <label for="shippingAddress">Shipping Address</label>
+            <input type="text" id="shippingAddress" required value="742 Evergreen Terrace">
+          </div>
+        </div>
+
+        <div class="form-row">
+          <div class="form-group">
+            <label for="shippingCity">City</label>
+            <input type="text" id="shippingCity" required value="Springfield">
+          </div>
+          <div class="form-group">
+            <label for="shippingZip">Postal / ZIP Code</label>
+            <input type="text" id="shippingZip" required value="97477">
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label>Payment Method (Processed by Payment Microservice :8004)</label>
+          <div class="payment-options">
+            <label class="pay-option active">
+              <input type="radio" name="payMethod" value="Credit Card" checked>
+              <span>💳 Credit Card (Remote RPC to Payment Service)</span>
+            </label>
+            <label class="pay-option">
+              <input type="radio" name="payMethod" value="Instant UPI">
+              <span>⚡ Instant UPI / NetBanking</span>
+            </label>
+          </div>
+        </div>
+
+        <div class="checkout-transaction-notice">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="12" y1="16" x2="12" y2="12"/><line x1="12" y1="8" x2="12.01" y2="8"/></svg>
+          <p>Order Service will orchestrate network calls: <strong>Reserve stock in Product-Service</strong>, <strong>Charge via Payment-Service</strong>, and <strong>Save order to Order-Service DB</strong> with end-to-end correlation tracing.</p>
+        </div>
+
+        <div class="modal-footer">
+          <button type="button" class="btn-secondary" id="cancelCheckoutBtn">Cancel</button>
+          <button type="submit" class="btn-primary" id="confirmOrderBtn">
+            Confirm Saga Order ($<span id="checkoutTotalValue">0.00</span>)
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- ORDER SUCCESS MODAL WITH DISTRIBUTED SAGA TRACE -->
+  <div class="modal" id="orderSuccessModal">
+    <div class="modal-backdrop" id="successBackdrop"></div>
+    <div class="modal-card success-card">
+      <div class="success-icon-wrap">
+        <svg width="44" height="44" viewBox="0 0 24 24" fill="none" stroke="#10b981" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>
+      </div>
+      <h3 class="success-title">Distributed Saga Succeeded!</h3>
+      <p class="success-sub">Order committed across decoupled microservices via asynchronous saga orchestration.</p>
+
+      <div class="receipt-box" id="successReceiptDetails">
+        <!-- Injected via JS -->
+      </div>
+
+      <div class="modal-footer centered">
+        <button class="btn-primary" id="viewMyOrdersBtn">View Order History</button>
+        <button class="btn-secondary" id="continueShoppingBtn">Continue Shopping</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Toast Notification Container -->
+  <div class="toast-container" id="toastContainer"></div>
+
+  <!-- Main JavaScript App -->
+  <script src="app.js"></script>
+</body>
+</html>
